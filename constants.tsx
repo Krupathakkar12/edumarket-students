@@ -1,15 +1,15 @@
 
 import React from 'react';
-import { 
-  Book as BookIcon, 
-  GraduationCap, 
-  Search, 
-  Heart, 
-  MessageCircle, 
-  User, 
-  FileText, 
-  BrainCircuit, 
-  MapPin, 
+import {
+  Book as BookIcon,
+  GraduationCap,
+  Search,
+  Heart,
+  MessageCircle,
+  User,
+  FileText,
+  BrainCircuit,
+  MapPin,
   ShoppingBag,
   Star,
   Zap,
@@ -93,6 +93,7 @@ export const KAGGLE_DATASETS = [
   }
 ];
 
+
 export const MOCK_BOOKS: any[] = [
   {
     id: '1',
@@ -100,11 +101,11 @@ export const MOCK_BOOKS: any[] = [
     author: 'Morris Kline',
     price: 450,
     condition: 'Good',
-    university: 'Stanford University',
-    location: 'Building 4, North Campus',
+    university: 'IIT Bombay',
+    location: 'Hostel 4, North Campus',
     image: 'https://picsum.photos/seed/calc/400/500',
     rating: 4.8,
-    sellerName: 'Alex J.'
+    sellerName: 'Rahul M.'
   },
   {
     id: '2',
@@ -112,11 +113,11 @@ export const MOCK_BOOKS: any[] = [
     author: 'Jonathan Clayden',
     price: 800,
     condition: 'New',
-    university: 'MIT',
-    location: 'Cambridge St, Local Pickup',
+    university: 'IIT Delhi',
+    location: 'Main Gate, Local Pickup',
     image: 'https://picsum.photos/seed/chem/400/500',
     rating: 4.9,
-    sellerName: 'Sarah K.'
+    sellerName: 'Priya K.'
   }
 ];
 
@@ -125,7 +126,7 @@ export const MOCK_NOTES: any[] = [
     id: 'n1',
     subject: 'Data Structures & Algorithms',
     semester: 'Sem 4',
-    university: 'UC Berkeley',
+    university: 'IIT Bombay',
     pages: 120,
     price: 199,
     rating: 4.9,

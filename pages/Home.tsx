@@ -36,7 +36,7 @@ const Home: React.FC = () => {
                   <ICONS.FileText className="w-5 h-5" />
                   Browse Notes
                 </Link>
-                <Link to="/sell-books" className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full backdrop-blur transition-all flex items-center gap-2">
+                <Link to="/sell-book" className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full backdrop-blur transition-all flex items-center gap-2">
                   <ICONS.ShoppingBag className="w-5 h-5" />
                   Sell Your Books
                 </Link>
