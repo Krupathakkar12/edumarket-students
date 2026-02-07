@@ -4,6 +4,7 @@ import { ICONS } from '../constants';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { authService } from '../services/auth';
 import { useNavigate } from 'react-router-dom';
+import { marketplaceService } from '../services/marketplace';
 
 const data = [
   { name: 'Jan', earnings: 4000, views: 2400 },
@@ -39,6 +40,18 @@ const Dashboard: React.FC = () => {
 
   if (!currentUser) return null;
 
+  const handleLogout = () => {
+    authService.signOut();
+    navigate('/');
+  };
+
+  // Calculate user's actual stats from their listings
+  const userListings = marketplaceService.getUserListings(currentUser.id);
+  const soldListings = userListings.filter(l => l.sold);
+  const totalEarnings = soldListings.reduce((sum, listing) => sum + listing.price, 0);
+  const booksSold = soldListings.length;
+  const activeListings = userListings.filter(l => !l.sold).length;
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col lg:flex-row gap-8">
@@ -62,7 +75,10 @@ const Dashboard: React.FC = () => {
               {item.name}
             </button>
           ))}
-          <button className="w-full flex items-center gap-3 px-4 py-3 mt-8 rounded-xl text-red-500 font-semibold hover:bg-red-50">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-3 mt-8 rounded-xl text-red-500 font-semibold hover:bg-red-50"
+          >
             <ICONS.LogOut className="w-5 h-5" />
             Logout
           </button>
@@ -79,10 +95,10 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard label="Total Earnings" value="₹12,450" icon={ICONS.Wallet} color="bg-emerald-500" />
-            <StatCard label="Notes Sold" value="48" icon={ICONS.FileText} color="bg-blue-500" />
-            <StatCard label="Books Sold" value="12" icon={ICONS.ShoppingBag} color="bg-orange-500" />
-            <StatCard label="Wallet Balance" value="₹2,300" icon={ICONS.CheckCircle} color="bg-purple-500" />
+            <StatCard label="Total Earnings" value={`₹${totalEarnings.toLocaleString('en-IN')}`} icon={ICONS.Wallet} color="bg-emerald-500" />
+            <StatCard label="Active Listings" value={activeListings.toString()} icon={ICONS.FileText} color="bg-blue-500" />
+            <StatCard label="Books Sold" value={booksSold.toString()} icon={ICONS.ShoppingBag} color="bg-orange-500" />
+            <StatCard label="Wallet Balance" value={`₹${totalEarnings.toLocaleString('en-IN')}`} icon={ICONS.CheckCircle} color="bg-purple-500" />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -129,27 +145,30 @@ const Dashboard: React.FC = () => {
               <button className="text-sm text-indigo-600 font-bold">View History</button>
             </div>
             <div className="space-y-4">
-              {[
-                { item: 'DSA Hand-written Notes', buyer: 'Mike Tyson', date: '2 hours ago', price: '+ ₹199', status: 'Completed' },
-                { item: 'Microeconomics Semester 2', buyer: 'Elon M.', date: '1 day ago', price: '+ ₹149', status: 'Completed' },
-                { item: 'Withdrawal to Bank', buyer: 'Self', date: '2 days ago', price: '- ₹1,000', status: 'Pending' },
-              ].map((tx, idx) => (
-                <div key={idx} className="flex items-center justify-between p-4 rounded-xl border border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center">
-                      <ICONS.ShoppingBag className="w-5 h-5 text-indigo-600" />
+              {soldListings.length > 0 ? (
+                soldListings.slice(0, 3).map((listing) => (
+                  <div key={listing.id} className="flex items-center justify-between p-4 rounded-xl border border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center">
+                        <ICONS.ShoppingBag className="w-5 h-5 text-indigo-600" />
+                      </div>
+                      <div>
+                        <p className="font-bold dark:text-white">{listing.title}</p>
+                        <p className="text-xs text-gray-500">Sold • {new Date(listing.createdAt).toLocaleDateString()}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-bold dark:text-white">{tx.item}</p>
-                      <p className="text-xs text-gray-500">{tx.buyer} • {tx.date}</p>
+                    <div className="text-right">
+                      <p className="font-bold text-emerald-500">+ ₹{listing.price.toLocaleString('en-IN')}</p>
+                      <p className="text-[10px] uppercase font-bold text-gray-400">Completed</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className={`font-bold ${tx.price.startsWith('+') ? 'text-emerald-500' : 'text-red-500'}`}>{tx.price}</p>
-                    <p className="text-[10px] uppercase font-bold text-gray-400">{tx.status}</p>
-                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <p>No transactions yet</p>
+                  <p className="text-sm">Start selling books to see your earnings here!</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </main>
