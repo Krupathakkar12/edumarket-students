@@ -1,0 +1,7 @@
+{
+  "name": "EduMarket: The Student Ecosystem",
+  "description": "A comprehensive marketplace for students to buy/sell books, access topper-verified notes, and utilize AI-powered study tools for academic excellence.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
