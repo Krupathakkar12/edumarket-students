@@ -15,39 +15,41 @@ const Contact: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Info Card */}
           <div className="space-y-8">
+            {/* Contact Team */}
+            <h2 className="text-2xl font-bold dark:text-white">Our Support Team</h2>
+
+            {/* Harshil Sharma */}
             <div className="bg-indigo-900-custom rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
               <div className="relative z-10">
-                <h2 className="text-2xl font-bold mb-6">Direct Support</h2>
-                <p className="text-indigo-100 mb-8">For immediate assistance, verification of topper status, or payment queries, please reach out directly.</p>
-                
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <ICONS.User className="w-6 h-6 text-emerald-400" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-indigo-300 font-bold uppercase tracking-wider">Contact Person</p>
-                      <p className="text-xl font-bold">Krupa Thakkar</p>
-                    </div>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-2xl font-bold">
+                    HS
                   </div>
+                  <div>
+                    <h3 className="text-2xl font-bold">Harshil Sharma</h3>
+                    <p className="text-indigo-200">Support & Queries</p>
+                  </div>
+                </div>
+                <p className="text-indigo-100 mb-6">For doubts about books, notes, or general inquiries.</p>
 
-                  <a href="tel:9512262984" className="flex items-start gap-4 hover:bg-white/5 p-2 -m-2 rounded-xl transition-colors">
-                    <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-6 h-6 text-emerald-400" />
+                <div className="space-y-4">
+                  <a href="tel:6378498638" className="flex items-center gap-4 hover:bg-white/5 p-3 -m-3 rounded-xl transition-colors">
+                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Phone className="w-5 h-5 text-emerald-400" />
                     </div>
                     <div>
-                      <p className="text-xs text-indigo-300 font-bold uppercase tracking-wider">Mobile Number</p>
-                      <p className="text-xl font-bold">+91 9512262984</p>
+                      <p className="text-xs text-indigo-300 font-bold uppercase tracking-wider">Mobile</p>
+                      <p className="text-lg font-bold">+91 63784 98638</p>
                     </div>
                   </a>
 
-                  <a href="mailto:Krupathakkar1210@gmail.com" className="flex items-start gap-4 hover:bg-white/5 p-2 -m-2 rounded-xl transition-colors">
-                    <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-6 h-6 text-emerald-400" />
+                  <a href="mailto:sharshilsharma294@gmail.com" className="flex items-center gap-4 hover:bg-white/5 p-3 -m-3 rounded-xl transition-colors">
+                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Mail className="w-5 h-5 text-emerald-400" />
                     </div>
                     <div>
-                      <p className="text-xs text-indigo-300 font-bold uppercase tracking-wider">Email Address</p>
-                      <p className="text-lg font-bold break-all">Krupathakkar1210@gmail.com</p>
+                      <p className="text-xs text-indigo-300 font-bold uppercase tracking-wider">Email</p>
+                      <p className="text-sm font-bold break-all">sharshilsharma294@gmail.com</p>
                     </div>
                   </a>
                 </div>
@@ -55,17 +57,56 @@ const Contact: React.FC = () => {
               <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl"></div>
             </div>
 
+            {/* Krupa Thakkar */}
+            <div className="bg-purple-600 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+              <div className="relative z-10">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-2xl font-bold">
+                    KT
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold">Krupa Thakkar</h3>
+                    <p className="text-purple-100">Technical Support</p>
+                  </div>
+                </div>
+                <p className="text-purple-100 mb-6">For technical issues, verification, and payment queries.</p>
+
+                <div className="space-y-4">
+                  <a href="tel:9512262984" className="flex items-center gap-4 hover:bg-white/5 p-3 -m-3 rounded-xl transition-colors">
+                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Phone className="w-5 h-5 text-emerald-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-purple-200 font-bold uppercase tracking-wider">Mobile</p>
+                      <p className="text-lg font-bold">+91 95122 62984</p>
+                    </div>
+                  </a>
+
+                  <a href="mailto:Krupathakkar1210@gmail.com" className="flex items-center gap-4 hover:bg-white/5 p-3 -m-3 rounded-xl transition-colors">
+                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Mail className="w-5 h-5 text-emerald-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-purple-200 font-bold uppercase tracking-wider">Email</p>
+                      <p className="text-sm font-bold break-all">Krupathakkar1210@gmail.com</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-purple-400/20 rounded-full blur-3xl"></div>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
-                <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700">
-                    <Clock className="w-6 h-6 text-indigo-600 mb-3" />
-                    <h4 className="font-bold dark:text-white">Response Time</h4>
-                    <p className="text-sm text-gray-500">Under 2 hours</p>
-                </div>
-                <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700">
-                    <MessageSquare className="w-6 h-6 text-indigo-600 mb-3" />
-                    <h4 className="font-bold dark:text-white">Availability</h4>
-                    <p className="text-sm text-gray-500">10 AM - 8 PM</p>
-                </div>
+              <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700">
+                <Clock className="w-6 h-6 text-indigo-600 mb-3" />
+                <h4 className="font-bold dark:text-white">Response Time</h4>
+                <p className="text-sm text-gray-500">Under 2 hours</p>
+              </div>
+              <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700">
+                <MessageSquare className="w-6 h-6 text-indigo-600 mb-3" />
+                <h4 className="font-bold dark:text-white">Availability</h4>
+                <p className="text-sm text-gray-500">10 AM - 8 PM</p>
+              </div>
             </div>
           </div>
 
