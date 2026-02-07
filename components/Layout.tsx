@@ -68,16 +68,16 @@ export const Header: React.FC<{ theme: Theme, toggleTheme: () => void }> = ({ th
           </div>
 
           <div className="flex items-center gap-2 sm:gap-4">
-            <button onClick={toggleTheme} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+            <button onClick={toggleTheme} className="p-2 hover:bg-white/10 rounded-full transition-colors" title={theme === 'light' ? "Switch to Dark Mode" : "Switch to Light Mode"}>
               {theme === 'light' ? <ICONS.Moon className="w-5 h-5" /> : <ICONS.Sun className="w-5 h-5" />}
             </button>
 
             {currentUser ? (
               <>
-                <Link to="/wishlist" className="p-2 hover:bg-white/10 rounded-full transition-colors hidden sm:block">
+                <Link to="/wishlist" className="p-2 hover:bg-white/10 rounded-full transition-colors hidden sm:block" title="Favorites & Wishlist">
                   <ICONS.Heart className="w-5 h-5" />
                 </Link>
-                <Link to="/messages" className="p-2 hover:bg-white/10 rounded-full transition-colors hidden sm:block">
+                <Link to="/messages" className="p-2 hover:bg-white/10 rounded-full transition-colors hidden sm:block" title="Messages">
                   <ICONS.MessageCircle className="w-5 h-5" />
                 </Link>
 

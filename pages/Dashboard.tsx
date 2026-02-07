@@ -82,6 +82,7 @@ const Dashboard: React.FC = () => {
               key={item.name}
               onClick={() => handleSidebarClick(item)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-semibold ${activeView === item.name ? 'bg-indigo-600 text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+              title={`Go to ${item.name}`}
             >
               <item.icon className="w-5 h-5" />
               {item.name}
@@ -90,6 +91,7 @@ const Dashboard: React.FC = () => {
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 mt-8 rounded-xl text-red-500 font-semibold hover:bg-red-50"
+            title="Sign out from your account"
           >
             <ICONS.LogOut className="w-5 h-5" />
             Logout
