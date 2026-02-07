@@ -1,13 +1,29 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ICONS } from '../constants';
 import { Theme } from '../types';
-import { Phone, Mail } from 'lucide-react';
+import { Phone, Mail, LogOut, ChevronDown } from 'lucide-react';
+import { authService } from '../services/auth';
 
 export const Header: React.FC<{ theme: Theme, toggleTheme: () => void }> = ({ theme, toggleTheme }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(authService.getCurrentUser());
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Check auth status on mount and location change
+  useEffect(() => {
+    setCurrentUser(authService.getCurrentUser());
+  }, [location]);
+
+  const handleLogout = () => {
+    authService.signOut();
+    setCurrentUser(null);
+    setShowUserMenu(false);
+    navigate('/');
+  };
 
   const navLinks = [
     { name: 'Buy Books', path: '/books', icon: ICONS.ShoppingBag },
@@ -31,9 +47,8 @@ export const Header: React.FC<{ theme: Theme, toggleTheme: () => void }> = ({ th
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-white/10 ${
-                  location.pathname === link.path ? 'bg-white/20' : ''
-                }`}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-white/10 ${location.pathname === link.path ? 'bg-white/20' : ''
+                  }`}
               >
                 {link.name}
               </Link>
@@ -56,19 +71,67 @@ export const Header: React.FC<{ theme: Theme, toggleTheme: () => void }> = ({ th
             <button onClick={toggleTheme} className="p-2 hover:bg-white/10 rounded-full transition-colors">
               {theme === 'light' ? <ICONS.Moon className="w-5 h-5" /> : <ICONS.Sun className="w-5 h-5" />}
             </button>
-            <Link to="/wishlist" className="p-2 hover:bg-white/10 rounded-full transition-colors hidden sm:block">
-              <ICONS.Heart className="w-5 h-5" />
-            </Link>
-            <Link to="/messages" className="p-2 hover:bg-white/10 rounded-full transition-colors hidden sm:block">
-              <ICONS.MessageCircle className="w-5 h-5" />
-            </Link>
-            <Link to="/dashboard" className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500-custom hover:bg-emerald-600 text-white rounded-full text-sm font-semibold transition-colors">
-              <ICONS.User className="w-4 h-4" />
-              <span className="hidden sm:inline">Profile</span>
-            </Link>
-            <button 
-                className="lg:hidden p-2 hover:bg-white/10 rounded-full transition-colors"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+
+            {currentUser ? (
+              <>
+                <Link to="/wishlist" className="p-2 hover:bg-white/10 rounded-full transition-colors hidden sm:block">
+                  <ICONS.Heart className="w-5 h-5" />
+                </Link>
+                <Link to="/messages" className="p-2 hover:bg-white/10 rounded-full transition-colors hidden sm:block">
+                  <ICONS.MessageCircle className="w-5 h-5" />
+                </Link>
+
+                {/* User Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500-custom hover:bg-emerald-600 text-white rounded-full text-sm font-semibold transition-colors"
+                  >
+                    <ICONS.User className="w-4 h-4" />
+                    <span className="hidden sm:inline">{currentUser.name}</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setShowUserMenu(false)}
+                        className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        <div className="flex items-center gap-2">
+                          <ICONS.User className="w-4 h-4" />
+                          Dashboard
+                        </div>
+                      </Link>
+                      <hr className="my-2 border-gray-200 dark:border-gray-700" />
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                      >
+                        <div className="flex items-center gap-2">
+                          <LogOut className="w-4 h-4" />
+                          Logout
+                        </div>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <Link to="/signin" className="px-4 py-1.5 text-sm font-medium hover:bg-white/10 rounded-full transition-colors hidden sm:block">
+                  Sign In
+                </Link>
+                <Link to="/signup" className="px-4 py-1.5 bg-emerald-500-custom hover:bg-emerald-600 text-white rounded-full text-sm font-semibold transition-colors">
+                  Sign Up
+                </Link>
+              </>
+            )}
+
+            <button
+              className="lg:hidden p-2 hover:bg-white/10 rounded-full transition-colors"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <ICONS.X className="w-6 h-6" /> : <ICONS.Menu className="w-6 h-6" />}
             </button>
@@ -105,24 +168,24 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-               <ICONS.Logo />
+              <ICONS.Logo />
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-sm">
               The ultimate student ecosystem. Buy, sell, learn, and grow together with verified materials and AI-powered study tools.
             </p>
             <Link to="/contact" className="bg-white dark:bg-gray-900 p-4 rounded-2xl border border-indigo-100 dark:border-indigo-900/50 shadow-sm inline-block hover:shadow-md transition-shadow group">
-                <h4 className="font-bold text-indigo-900 dark:text-indigo-400 text-sm mb-3">For Any Doubts, Contact:</h4>
-                <div className="space-y-2">
-                    <p className="font-semibold text-gray-900 dark:text-white text-sm group-hover:text-indigo-600">Krupa Thakkar</p>
-                    <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-                        <Phone className="w-3.5 h-3.5" />
-                        +91 9512262984
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-                        <Mail className="w-3.5 h-3.5" />
-                        Krupathakkar1210@gmail.com
-                    </div>
+              <h4 className="font-bold text-indigo-900 dark:text-indigo-400 text-sm mb-3">For Any Doubts, Contact:</h4>
+              <div className="space-y-2">
+                <p className="font-semibold text-gray-900 dark:text-white text-sm group-hover:text-indigo-600">Krupa Thakkar</p>
+                <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+                  <Phone className="w-3.5 h-3.5" />
+                  +91 9512262984
                 </div>
+                <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+                  <Mail className="w-3.5 h-3.5" />
+                  Krupathakkar1210@gmail.com
+                </div>
+              </div>
             </Link>
           </div>
           <div>
