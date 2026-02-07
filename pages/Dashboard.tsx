@@ -1,7 +1,9 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ICONS } from '../constants';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { authService } from '../services/auth';
+import { useNavigate } from 'react-router-dom';
 
 const data = [
   { name: 'Jan', earnings: 4000, views: 2400 },
@@ -25,42 +27,54 @@ const StatCard: React.FC<{ label: string, value: string, icon: any, color: strin
 );
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
+  const currentUser = authService.getCurrentUser();
+
+  // Redirect to signin if not logged in
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/signin');
+    }
+  }, [currentUser, navigate]);
+
+  if (!currentUser) return null;
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar */}
         <aside className="w-full lg:w-64 space-y-2">
-            {[
-                { name: 'Dashboard', icon: ICONS.LayoutDashboard, active: true },
-                { name: 'My Listings', icon: ICONS.ShoppingBag },
-                { name: 'My Notes', icon: ICONS.FileText },
-                { name: 'Earnings', icon: ICONS.Wallet },
-                { name: 'Orders', icon: ICONS.CheckCircle },
-                { name: 'Messages', icon: ICONS.MessageCircle },
-                { name: 'Study Tools', icon: ICONS.BrainCircuit },
-                { name: 'Settings', icon: ICONS.Settings },
-            ].map(item => (
-                <button 
-                    key={item.name}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-semibold ${item.active ? 'bg-indigo-600 text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
-                >
-                    <item.icon className="w-5 h-5" />
-                    {item.name}
-                </button>
-            ))}
-            <button className="w-full flex items-center gap-3 px-4 py-3 mt-8 rounded-xl text-red-500 font-semibold hover:bg-red-50">
-                <ICONS.LogOut className="w-5 h-5" />
-                Logout
+          {[
+            { name: 'Dashboard', icon: ICONS.LayoutDashboard, active: true },
+            { name: 'My Listings', icon: ICONS.ShoppingBag },
+            { name: 'My Notes', icon: ICONS.FileText },
+            { name: 'Earnings', icon: ICONS.Wallet },
+            { name: 'Orders', icon: ICONS.CheckCircle },
+            { name: 'Messages', icon: ICONS.MessageCircle },
+            { name: 'Study Tools', icon: ICONS.BrainCircuit },
+            { name: 'Settings', icon: ICONS.Settings },
+          ].map(item => (
+            <button
+              key={item.name}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-semibold ${item.active ? 'bg-indigo-600 text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+            >
+              <item.icon className="w-5 h-5" />
+              {item.name}
             </button>
+          ))}
+          <button className="w-full flex items-center gap-3 px-4 py-3 mt-8 rounded-xl text-red-500 font-semibold hover:bg-red-50">
+            <ICONS.LogOut className="w-5 h-5" />
+            Logout
+          </button>
         </aside>
 
         {/* Main Content */}
         <main className="flex-1 space-y-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold dark:text-white">Welcome back, Sarah! 👋</h1>
+            <h1 className="text-3xl font-bold dark:text-white">Welcome back, {currentUser.name}! 👋</h1>
             <div className="bg-emerald-50 dark:bg-emerald-900/30 px-4 py-2 rounded-full border border-emerald-100 dark:border-emerald-800 flex items-center gap-2">
-                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                <span className="text-sm font-bold text-emerald-700 dark:text-emerald-400">University Rank: 14</span>
+              <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+              <span className="text-sm font-bold text-emerald-700 dark:text-emerald-400">University Rank: 14</span>
             </div>
           </div>
 
@@ -79,8 +93,8 @@ const Dashboard: React.FC = () => {
                   <AreaChart data={data}>
                     <defs>
                       <linearGradient id="colorEarnings" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10B981" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#10B981" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -111,8 +125,8 @@ const Dashboard: React.FC = () => {
 
           <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
             <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold dark:text-white">Recent Transactions</h3>
-                <button className="text-sm text-indigo-600 font-bold">View History</button>
+              <h3 className="text-lg font-bold dark:text-white">Recent Transactions</h3>
+              <button className="text-sm text-indigo-600 font-bold">View History</button>
             </div>
             <div className="space-y-4">
               {[
@@ -123,7 +137,7 @@ const Dashboard: React.FC = () => {
                 <div key={idx} className="flex items-center justify-between p-4 rounded-xl border border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center">
-                        <ICONS.ShoppingBag className="w-5 h-5 text-indigo-600" />
+                      <ICONS.ShoppingBag className="w-5 h-5 text-indigo-600" />
                     </div>
                     <div>
                       <p className="font-bold dark:text-white">{tx.item}</p>
