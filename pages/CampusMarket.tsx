@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ICONS } from '../constants';
+import { AlertCircle, BookOpen, Laptop } from 'lucide-react';
 import { INDIAN_UNIVERSITIES, requestUserLocation, getNearbyUniversities } from '../services/location';
 
 const CampusMarket: React.FC = () => {
@@ -119,8 +120,8 @@ const CampusMarket: React.FC = () => {
                                 key={campus.id}
                                 onClick={() => setSelectedCampus(campus)}
                                 className={`px-6 py-3 rounded-full font-semibold whitespace-nowrap transition-all ${selectedCampus?.id === campus.id
-                                        ? 'bg-indigo-600 text-white shadow-lg'
-                                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-indigo-300'
+                                    ? 'bg-indigo-600 text-white shadow-lg'
+                                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-indigo-300'
                                     }`}
                             >
                                 {campus.name}
