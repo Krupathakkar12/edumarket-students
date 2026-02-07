@@ -12,17 +12,10 @@ import SignUp from './pages/SignUp';
 import Books from './pages/Books';
 import SellBook from './pages/SellBook';
 import CampusMarket from './pages/CampusMarket';
-
-// Mock Notes Page for navigation
-const Notes = () => (
-  <div className="container mx-auto px-4 py-12 text-center">
-    <h1 className="text-3xl font-bold dark:text-white">Notes Marketplace</h1>
-    <p className="text-gray-500 mt-2">High-quality, AI-scanned notes from the brightest students.</p>
-    <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <p className="col-span-full dark:text-gray-400">Discover topper-verified materials and boost your grades.</p>
-    </div>
-  </div>
-);
+import Messages from './pages/Messages';
+import Settings from './pages/Settings';
+import Notes from './pages/Notes';
+import SellNotes from './pages/SellNotes';
 
 const App: React.FC = () => {
   return (
@@ -37,7 +30,10 @@ const App: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/sell-book" element={<SellBook />} />
+          <Route path="/sell-notes" element={<SellNotes />} />
           <Route path="/campus" element={<CampusMarket />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<Home />} />
