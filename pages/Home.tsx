@@ -36,7 +36,7 @@ const Home: React.FC = () => {
                   <ICONS.FileText className="w-5 h-5" />
                   Browse Notes
                 </Link>
-                <Link to="/sell" className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full backdrop-blur transition-all flex items-center gap-2">
+                <Link to="/sell-books" className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full backdrop-blur transition-all flex items-center gap-2">
                   <ICONS.ShoppingBag className="w-5 h-5" />
                   Sell Your Books
                 </Link>
@@ -107,7 +107,7 @@ const Home: React.FC = () => {
             <h2 className="text-3xl font-bold dark:text-white">Topper-Verified Notes ⭐</h2>
             <p className="text-gray-500 dark:text-gray-400">Hand-picked excellence for your grades</p>
           </div>
-          <Link to="/toppers" className="text-indigo-600 font-semibold hover:underline">View All</Link>
+          <Link to="/notes" className="text-indigo-600 font-semibold hover:underline">View All</Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {MOCK_NOTES.map(note => <NoteCard key={note.id} note={note} />)}
@@ -139,7 +139,7 @@ const Home: React.FC = () => {
               <ICONS.MapPin className="w-12 h-12 text-emerald-400" />
               <h3 className="text-xl font-bold">See everything near you?</h3>
               <p className="text-sm text-indigo-100">Browse 250+ more items available at your university.</p>
-              <button className="w-full py-3 bg-white text-indigo-600 font-bold rounded-xl">Open Campus Map</button>
+              <Link to="/campus" className="w-full py-3 bg-white text-indigo-600 font-bold rounded-xl block text-center">Open Campus Map</Link>
             </div>
           </div>
         </div>
@@ -193,7 +193,7 @@ const Home: React.FC = () => {
                 {[1, 2, 3, 4, 5].map(i => <ICONS.Star key={i} className="w-8 h-8 fill-yellow-400 text-yellow-400" />)}
               </div>
               <p className="text-xl font-medium">Average Student Rating</p>
-              <button className="px-10 py-4 bg-white text-emerald-600 font-bold rounded-full shadow-xl hover:scale-105 transition-transform">Start Your Journey</button>
+              <Link to="/login" className="inline-block px-10 py-4 bg-white text-emerald-600 font-bold rounded-full shadow-xl hover:scale-105 transition-transform">Start Your Journey</Link>
             </div>
           </div>
           <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
