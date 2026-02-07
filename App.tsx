@@ -11,6 +11,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Books from './pages/Books';
 import SellBook from './pages/SellBook';
+import CampusMarket from './pages/CampusMarket';
 
 // Mock Notes Page for navigation
 const Notes = () => (
@@ -36,6 +37,7 @@ const App: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/sell-book" element={<SellBook />} />
+          <Route path="/campus" element={<CampusMarket />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<Home />} />
