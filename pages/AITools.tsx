@@ -7,24 +7,41 @@ const AITools: React.FC = () => {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [error, setError] = useState('');
   const [mode, setMode] = useState<'summary' | 'flashcards' | 'questions'>('summary');
 
   const handleProcess = async () => {
     if (!content.trim()) return;
     setLoading(true);
+    setError('');
+    setResult(null);
+
     try {
       if (mode === 'summary') {
         const res = await geminiService.generateSummary(content);
-        setResult(res);
+        if (res && res.includes('error occurred')) {
+          setError('API Error: Please configure your Gemini API key or try again later.');
+        } else {
+          setResult(res);
+        }
       } else if (mode === 'flashcards') {
         const res = await geminiService.generateFlashcards(content);
-        setResult(res);
+        if (Array.isArray(res) && res.length > 0) {
+          setResult(res);
+        } else {
+          setError('Could not generate flashcards. Please try again.');
+        }
       } else if (mode === 'questions') {
         const res = await geminiService.generatePracticeQuestions(content);
-        setResult(res);
+        if (Array.isArray(res) && res.length > 0) {
+          setResult(res);
+        } else {
+          setError('Could not generate questions. Please try again.');
+        }
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      console.error('AI Tools Error:', err);
+      setError(err.message || 'An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -51,11 +68,10 @@ const AITools: React.FC = () => {
                 <button
                   key={tool.id}
                   onClick={() => setMode(tool.id as any)}
-                  className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${
-                    mode === tool.id 
-                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none' 
+                  className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${mode === tool.id
+                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none'
                     : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100'
-                  }`}
+                    }`}
                 >
                   <tool.icon className="w-5 h-5" />
                   <span className="font-semibold text-sm">{tool.name}</span>
@@ -65,13 +81,13 @@ const AITools: React.FC = () => {
           </div>
 
           <div className="bg-emerald-50 dark:bg-emerald-900/20 p-6 rounded-2xl border border-emerald-100 dark:border-emerald-800">
-             <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 mb-2">
-                <ICONS.Zap className="w-5 h-5" />
-                <h4 className="font-bold">Pro Tip</h4>
-             </div>
-             <p className="text-xs text-emerald-600 dark:text-emerald-300">
-                Paste your lecture notes or syllabus to get the most accurate AI-generated materials for your revision.
-             </p>
+            <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 mb-2">
+              <ICONS.Zap className="w-5 h-5" />
+              <h4 className="font-bold">Pro Tip</h4>
+            </div>
+            <p className="text-xs text-emerald-600 dark:text-emerald-300">
+              Paste your lecture notes or syllabus to get the most accurate AI-generated materials for your revision.
+            </p>
           </div>
         </div>
 
@@ -79,8 +95,8 @@ const AITools: React.FC = () => {
         <div className="lg:col-span-2 space-y-8">
           <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
             <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
-                <span className="text-sm font-semibold text-gray-500">Input Source</span>
-                <button className="text-xs text-indigo-600 font-bold hover:underline">Clear</button>
+              <span className="text-sm font-semibold text-gray-500">Input Source</span>
+              <button className="text-xs text-indigo-600 font-bold hover:underline">Clear</button>
             </div>
             <textarea
               value={content}
@@ -93,7 +109,7 @@ const AITools: React.FC = () => {
               <label htmlFor="file-upload" className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium cursor-pointer hover:bg-white dark:hover:bg-gray-800 transition-colors">
                 Upload Document
               </label>
-              <button 
+              <button
                 onClick={handleProcess}
                 disabled={loading || !content}
                 className="px-8 py-2 bg-indigo-600 text-white font-bold rounded-lg disabled:opacity-50 hover:bg-indigo-700 transition-all flex items-center gap-2"
@@ -104,6 +120,33 @@ const AITools: React.FC = () => {
             </div>
           </div>
 
+          {/* Error Display */}
+          {error && (
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-6">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-red-100 dark:bg-red-900/40 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-red-900 dark:text-red-200 mb-2">Generation Failed</h3>
+                  <p className="text-sm text-red-800 dark:text-red-300 mb-3">{error}</p>
+                  <div className="bg-red-100 dark:bg-red-900/40 p-3 rounded-lg text-xs text-red-900 dark:text-red-200">
+                    <p className="font-semibold mb-1">💡 Using Demo Mode:</p>
+                    <p>The AI features require a Gemini API key. For now, here's a sample output:</p>
+                  </div>
+                  <button
+                    onClick={() => setError('')}
+                    className="mt-3 text-sm text-red-700 dark:text-red-300 font-semibold hover:underline"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Results Area */}
           {(result || loading) && (
             <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xl animate-in fade-in slide-in-from-bottom-4">
@@ -111,7 +154,7 @@ const AITools: React.FC = () => {
                 <ICONS.CheckCircle className="text-emerald-500" />
                 Your Generated {mode}
               </h3>
-              
+
               {loading ? (
                 <div className="space-y-4">
                   <div className="h-4 bg-gray-100 dark:bg-gray-700 rounded w-3/4 animate-pulse"></div>
@@ -125,7 +168,7 @@ const AITools: React.FC = () => {
                       {result}
                     </div>
                   )}
-                  
+
                   {mode === 'flashcards' && Array.isArray(result) && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {result.map((card: any, idx: number) => (
