@@ -75,7 +75,7 @@ const CampusMarket: React.FC = () => {
             {locationPermission === 'denied' && (
                 <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-2xl p-6 mb-8">
                     <div className="flex items-start gap-3">
-                        <ICONS.AlertCircle className="w-6 h-6 text-yellow-600 dark:text-yellow-400 flex-shrink-0" />
+                        <AlertCircle className="w-6 h-6 text-yellow-600 dark:text-yellow-400 flex-shrink-0" />
                         <div>
                             <h4 className="font-bold text-yellow-900 dark:text-yellow-200 mb-1">Location Access Denied</h4>
                             <p className="text-sm text-yellow-800 dark:text-yellow-300 mb-3">We'll show you universities across India. Enable location to see items near you.</p>
@@ -148,8 +148,8 @@ const CampusMarket: React.FC = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                         {[
-                            { icon: ICONS.BookOpen, title: 'Textbooks', desc: 'Course materials & references' },
-                            { icon: ICONS.Laptop, title: 'Electronics', desc: 'Laptops, calculators, gadgets' },
+                            { icon: BookOpen, title: 'Textbooks', desc: 'Course materials & references' },
+                            { icon: Laptop, title: 'Electronics', desc: 'Laptops, calculators, gadgets' },
                             { icon: ICONS.ShoppingBag, title: 'Essentials', desc: 'Notes, stationery, more' }
                         ].map((category, idx) => (
                             <div key={idx} className="bg-white dark:bg-gray-800 p-6 rounded-2xl">
