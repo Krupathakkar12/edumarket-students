@@ -1,5 +1,5 @@
 
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Initialize with API key
 const apiKey = (import.meta.env.VITE_GEMINI_API_KEY as string) || "";
@@ -9,20 +9,17 @@ if (!apiKey) {
   throw new Error("Gemini API key is not configured. Please set VITE_GEMINI_API_KEY in your .env file.");
 }
 
-const ai = new GoogleGenAI({ apiKey });
+const genAI = new GoogleGenerativeAI(apiKey);
 
 export const geminiService = {
   generatePythonCode: async (datasetName: string, goal: string) => {
     try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
-        contents: `You are a Senior Data Scientist. Write a clean, commented Python script for a Kaggle dataset named "${datasetName}". The goal is "${goal}". Use libraries like pandas, matplotlib, and sklearn. Explain what the code does briefly at the end.`,
-        config: {
-          temperature: 0.3,
-          topP: 0.9,
-        }
-      });
-      return response.text || "Could not generate code.";
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const prompt = `You are a Senior Data Scientist. Write a clean, commented Python script for a Kaggle dataset named "${datasetName}". The goal is "${goal}". Use libraries like pandas, matplotlib, and sklearn. Explain what the code does briefly at the end.`;
+
+      const result = await model.generateContent(prompt);
+      const response = result.response;
+      return response.text() || "Could not generate code.";
     } catch (error: any) {
       console.error("Gemini Python Gen Error:", error);
       throw new Error(`Failed to generate code. ${error.message || 'The API might be experiencing issues. Please try again.'}`);
@@ -31,15 +28,12 @@ export const geminiService = {
 
   generateSummary: async (content: string) => {
     try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
-        contents: `Summarize the following educational content in a concise, bulleted format suitable for exam revision: \n\n ${content}`,
-        config: {
-          temperature: 0.5,
-          topP: 0.9,
-        }
-      });
-      return response.text || "Could not generate summary.";
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const prompt = `Summarize the following educational content in a concise, bulleted format suitable for exam revision:\n\n${content}`;
+
+      const result = await model.generateContent(prompt);
+      const response = result.response;
+      return response.text() || "Could not generate summary.";
     } catch (error: any) {
       console.error("Gemini Summary Error:", error);
       throw new Error(`Failed to generate summary. ${error.message || 'The API might be experiencing issues. Please try again.'}`);
@@ -48,25 +42,25 @@ export const geminiService = {
 
   generateFlashcards: async (content: string) => {
     try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
-        contents: `Create a set of 5-10 flashcards (Question and Answer pairs) based on the following text. Return them in a valid JSON format. \n\n ${content}`,
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: "array" as const,
-            items: {
-              type: "object" as const,
-              properties: {
-                question: { type: "string" as const },
-                answer: { type: "string" as const }
-              },
-              required: ["question", "answer"]
-            }
-          }
+      const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+          responseMimeType: "application/json"
         }
       });
-      return JSON.parse(response.text || "[]");
+      const prompt = `Create a set of 5-10 flashcards (Question and Answer pairs) based on the following text. Return ONLY a valid JSON array in this exact format: [{"question": "...", "answer": "..."}]\n\nText:\n${content}`;
+
+      const result = await model.generateContent(prompt);
+      const response = result.response;
+      const text = response.text();
+
+      try {
+        return JSON.parse(text);
+      } catch {
+        // If JSON parsing fails, return empty array
+        console.warn("Failed to parse flashcards JSON, returning empty array");
+        return [];
+      }
     } catch (error: any) {
       console.error("Gemini Flashcards Error:", error);
       throw new Error(`Failed to generate flashcards. ${error.message || 'The API might be experiencing issues. Please try again.'}`);
@@ -75,30 +69,28 @@ export const geminiService = {
 
   generatePracticeQuestions: async (content: string) => {
     try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
-        contents: `Generate 5 multiple-choice questions based on this text for exam practice. Include options and the correct answer. \n\n ${content}`,
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: "array" as const,
-            items: {
-              type: "object" as const,
-              properties: {
-                question: { type: "string" as const },
-                options: { type: "array" as const, items: { type: "string" as const } },
-                correctAnswer: { type: "string" as const }
-              },
-              required: ["question", "options", "correctAnswer"]
-            }
-          }
+      const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+          responseMimeType: "application/json"
         }
       });
-      return JSON.parse(response.text || "[]");
+      const prompt = `Generate 5 multiple-choice questions based on this text for exam practice. Return ONLY a valid JSON array in this exact format: [{"question": "...", "options": ["A", "B", "C", "D"], "correctAnswer": "A"}]\n\nText:\n${content}`;
+
+      const result = await model.generateContent(prompt);
+      const response = result.response;
+      const text = response.text();
+
+      try {
+        return JSON.parse(text);
+      } catch {
+        // If JSON parsing fails, return empty array
+        console.warn("Failed to parse questions JSON, returning empty array");
+        return [];
+      }
     } catch (error: any) {
       console.error("Gemini Practice Questions Error:", error);
       throw new Error(`Failed to generate questions. ${error.message || 'The API might be experiencing issues. Please try again.'}`);
     }
   }
 };
-
