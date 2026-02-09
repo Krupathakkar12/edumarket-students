@@ -15,7 +15,7 @@ export const geminiService = {
   generatePythonCode: async (datasetName: string, goal: string) => {
     try {
       const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash-exp',
+        model: 'gemini-1.5-flash',
         contents: `You are a Senior Data Scientist. Write a clean, commented Python script for a Kaggle dataset named "${datasetName}". The goal is "${goal}". Use libraries like pandas, matplotlib, and sklearn. Explain what the code does briefly at the end.`,
         config: {
           temperature: 0.3,
@@ -32,7 +32,7 @@ export const geminiService = {
   generateSummary: async (content: string) => {
     try {
       const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash-exp',
+        model: 'gemini-1.5-flash',
         contents: `Summarize the following educational content in a concise, bulleted format suitable for exam revision: \n\n ${content}`,
         config: {
           temperature: 0.5,
@@ -49,7 +49,7 @@ export const geminiService = {
   generateFlashcards: async (content: string) => {
     try {
       const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash-exp',
+        model: 'gemini-1.5-flash',
         contents: `Create a set of 5-10 flashcards (Question and Answer pairs) based on the following text. Return them in a valid JSON format. \n\n ${content}`,
         config: {
           responseMimeType: "application/json",
@@ -76,7 +76,7 @@ export const geminiService = {
   generatePracticeQuestions: async (content: string) => {
     try {
       const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash-exp',
+        model: 'gemini-1.5-flash',
         contents: `Generate 5 multiple-choice questions based on this text for exam practice. Include options and the correct answer. \n\n ${content}`,
         config: {
           responseMimeType: "application/json",
@@ -101,3 +101,4 @@ export const geminiService = {
     }
   }
 };
+
