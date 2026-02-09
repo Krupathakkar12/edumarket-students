@@ -14,7 +14,7 @@ const genAI = new GoogleGenerativeAI(apiKey);
 export const geminiService = {
   generatePythonCode: async (datasetName: string, goal: string) => {
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
       const prompt = `You are a Senior Data Scientist. Write a clean, commented Python script for a Kaggle dataset named "${datasetName}". The goal is "${goal}". Use libraries like pandas, matplotlib, and sklearn. Explain what the code does briefly at the end.`;
 
       const result = await model.generateContent(prompt);
@@ -28,7 +28,7 @@ export const geminiService = {
 
   generateSummary: async (content: string) => {
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
       const prompt = `Summarize the following educational content in a concise, bulleted format suitable for exam revision:\n\n${content}`;
 
       const result = await model.generateContent(prompt);
@@ -42,7 +42,7 @@ export const geminiService = {
 
   generateFlashcards: async (content: string) => {
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
       const prompt = `Create a set of 5-10 flashcards (Question and Answer pairs) based on the following text. Return ONLY a valid JSON array in this exact format: [{"question": "...", "answer": "..."}]\n\nText:\n${content}`;
 
       const result = await model.generateContent(prompt);
@@ -68,7 +68,7 @@ export const geminiService = {
 
   generatePracticeQuestions: async (content: string) => {
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
       const prompt = `Generate 5 multiple-choice questions based on this text for exam practice. Return ONLY a valid JSON array in this exact format: [{"question": "...", "options": ["A", "B", "C", "D"], "correctAnswer": "A"}]\n\nText:\n${content}`;
 
       const result = await model.generateContent(prompt);
