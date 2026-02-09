@@ -2,11 +2,14 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Initialize with API key
-const apiKey = (import.meta.env.VITE_GEMINI_API_KEY as string) || "";
+// In production (Vercel), use GEMINI_API_KEY
+// In development (local), use VITE_GEMINI_API_KEY
+const apiKey = (import.meta.env.GEMINI_API_KEY as string) ||
+  (import.meta.env.VITE_GEMINI_API_KEY as string) || "";
 
 if (!apiKey) {
-  console.error("Gemini API key is not configured. Please add VITE_GEMINI_API_KEY to your .env file.");
-  throw new Error("Gemini API key is not configured. Please set VITE_GEMINI_API_KEY in your .env file.");
+  console.error("Gemini API key is not configured. Please add GEMINI_API_KEY (Vercel) or VITE_GEMINI_API_KEY (local) to your environment variables.");
+  throw new Error("Gemini API key is not configured.");
 }
 
 const genAI = new GoogleGenerativeAI(apiKey);
